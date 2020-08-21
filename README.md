@@ -5,7 +5,7 @@ __Anish Sachdeva (DTU/2K16/MC/013)__
 | No. | Experiment Name | Date | Code |
 |-----|-----------------|------|------|
 | 1 | Program to find the number of vertices, even vertices, odd vertices and number of edges in a Graph. | 20th August 2020 | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab1.java) |  
-| 2 | Program to Find Union, Intersection and ring-sum of 2 graphs. | | |
+| 2 | Program to Find Union, Intersection and ring-sum of 2 graphs. | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab2.java)|
 | 3 | Program to Find Minimum Spanning tree Using Prim's Algorithm | | |
 | 4 | Program to Find Minimum Spanning tree Using Kruskal's Algorithm | | |
 | 5 | Program to find Shortest Path between 2 Vertices using Dijkstra Algorithm | | |
