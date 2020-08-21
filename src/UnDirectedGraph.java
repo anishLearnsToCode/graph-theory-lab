@@ -122,6 +122,26 @@ public class UnDirectedGraph {
         return UnDirectedGraph.fromMatrix(result);
     }
 
+    public UnDirectedGraph ringSum(UnDirectedGraph other) {
+        return ringSum(other.adjacencyMatrix);
+    }
+
+    public UnDirectedGraph ringSum(int[][] other) {
+        if (dimensionsMismatch(other)) {
+            System.out.println("Dimensions Mismatch");
+            return null;
+        }
+
+        int[][] result = new int[adjacencyMatrix.length][adjacencyMatrix.length];
+        for (int row = 0 ; row < result.length ; row++) {
+            for (int column = 0 ; column < result.length ; column++) {
+                result[row][column] = adjacencyMatrix[row][column] + other[row][column] == 1 ? 1 : 0;
+            }
+        }
+
+        return UnDirectedGraph.fromMatrix(result);
+    }
+
     private boolean dimensionsMismatch(int[][] other) {
         return this.adjacencyMatrix.length != other.length
                 || this.adjacencyMatrix[0].length != other[0].length;

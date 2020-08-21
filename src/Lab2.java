@@ -1,9 +1,3 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public class Lab2 {
     public static void main(String[] args) {
         int[][] matrix1 = {
@@ -14,8 +8,8 @@ public class Lab2 {
         };
 
         int[][] matrix2 = {
-                {0, 0, 1, 1},
-                {0, 0, 1, 0},
+                {0, 1, 1, 1},
+                {1, 0, 1, 0},
                 {1, 1, 0, 0},
                 {1, 0, 0, 0}
         };
@@ -27,5 +21,9 @@ public class Lab2 {
         // testing intersection
         UnDirectedGraph intersection = UnDirectedGraph.fromMatrix(matrix1).intersection(matrix2);
         System.out.println(intersection);
+
+        // testing ring sum
+        UnDirectedGraph ringSum = UnDirectedGraph.fromMatrix(matrix1).ringSum(matrix2);
+        System.out.println(ringSum);
     }
 }
