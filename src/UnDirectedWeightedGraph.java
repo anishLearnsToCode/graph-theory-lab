@@ -6,6 +6,23 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
     private int degree = 0;
     private int batchSize = 0;
 
+    public static UnDirectedWeightedGraph example1() {
+        UnDirectedWeightedGraph graph = new UnDirectedWeightedGraph();
+        graph.addVertices(6);
+        graph.addEdge(0, 1, 7);
+        graph.addEdge(1, 2, 3);
+        graph.addEdge(2, 4, 3);
+        graph.addEdge(0, 2, 8);
+        graph.addEdge(2, 3, 4);
+        graph.addEdge(1, 3, 6);
+        graph.addEdge(1, 3, 8);
+        graph.addEdge(3, 4, 2);
+        graph.addEdge(3, 5, 5);
+        graph.addEdge(4, 5, 2);
+        graph.addEdge(5, 5, 1);
+        return graph;
+    }
+
     @Override
     public String toString() {
         return "Graph{" +
@@ -33,9 +50,44 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
             degree++;
         }
 
+        private boolean pathTo(Vertex to) {
+            return pathTo(to, new HashSet<>());
+        }
+
+        private boolean pathTo(Vertex to, Set<Vertex> visited) {
+            if (visited.contains(this)) {
+                return false;
+            }
+            if (this == to) {
+                return true;
+            }
+            visited.add(this);
+            for (Edge edge : this) {
+                if (edge.to.pathTo(other(this, edge), visited)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Vertex other(Vertex vertex, Edge edge) {
+            if (edge.from == vertex) {
+                return edge.to;
+            }
+            return edge.from;
+        }
+
         @Override
         public Iterator<Edge> iterator() {
             return edges.iterator();
+        }
+
+        @Override
+        public String toString() {
+            return "Vertex{" +
+                    "data=" + data +
+                    ", degree=" + degree +
+                    '}';
         }
     }
 
@@ -58,6 +110,15 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
         public int compareTo(Edge other) {
             return Integer.compare(this.weight, other.weight);
         }
+
+        @Override
+        public String toString() {
+            return "Edge{" +
+                    "from=" + from.data +
+                    ", to=" + to.data +
+                    ", weight=" + weight +
+                    '}';
+        }
     }
 
     private void addVertex(int data) {
@@ -71,6 +132,10 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
         for (int i = 0 ; i < quantity ; i++) {
             addVertex(batchSize++);
         }
+    }
+
+    public boolean containsVertex(int data) {
+        return vertices.containsKey(data);
     }
 
     public void addEdge(int from, int to) {
@@ -121,12 +186,46 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
         return graph;
     }
 
+    public boolean pathBetween(int from, int to) {
+        if (containsVertex(from) && containsVertex(to)) {
+            return vertices.get(from).pathTo(vertices.get(to));
+        }
+        return false;
+    }
+
+    public UnDirectedWeightedGraph minimumSpanningTreeKruskal() {
+        Set<Edge> edges = edges();
+        Queue<Edge> heap = new PriorityQueue<>(Edge::compareTo);
+        heap.addAll(edges);
+        UnDirectedWeightedGraph result = new UnDirectedWeightedGraph();
+        while (!heap.isEmpty()) {
+            Edge edge = heap.poll();
+            if (edge.from == edge.to) {
+                continue;
+            }
+            if (!result.pathBetween(edge.from.data, edge.to.data)) {
+                result.addEdge(edge);
+            }
+        }
+        return result;
+    }
+
+    private Set<Edge> edges() {
+        Set<Edge> result = new HashSet<>();
+        for (Vertex vertex : this) {
+            for (Edge edge : vertex) {
+                result.add(edge);
+            }
+        }
+        return result;
+    }
+
     public int edgeSum() {
         int sum = 0;
         Set<Edge> considered = new HashSet<>();
         for (Vertex vertex : this) {
             for (Edge edge : vertex) {
-                if (!considered.contains(edge)) {
+                if (!considered.contains(edge) && !considered.contains(edge)) {
                     sum += edge.weight;
                     considered.add(edge);
                 }
