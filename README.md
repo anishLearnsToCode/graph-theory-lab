@@ -8,7 +8,7 @@ __Anish Sachdeva (DTU/2K16/MC/013)__
 | 2 | Program to Find Union, Intersection and ring-sum of 2 graphs. | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab2.java)|
 | 3 | Program to Find Minimum Spanning tree Using Prim's Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab3.java) |
 | 4 | Program to Find Minimum Spanning tree Using Kruskal's Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab4.java) |
-| 5 | Program to find Shortest Path between 2 Vertices using Dijkstra Algorithm | | |
+| 5 | Program to find Shortest Path between 2 Vertices using Dijkstra Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab5.java) |
 | 6 | Program to find Shortest Path between every pair of vertices in a graph using Floyd-Warshall's Algorithm | | |
 | 7 | Program to find Shortest Path between 2 Vertices using Bellman Ford's Algorithm | | |
 | 8 | Program For finding maximum Matching for bipartite graph | | |

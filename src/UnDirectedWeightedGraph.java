@@ -1,4 +1,10 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
 public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph.Vertex> {
     private final Map<Integer, Vertex> vertices = new HashMap<>();
@@ -68,6 +74,10 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
                 }
             }
             return false;
+        }
+
+        private Vertex other(Edge edge) {
+            return other(this, edge);
         }
 
         private Vertex other(Vertex vertex, Edge edge) {
@@ -232,5 +242,60 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
             }
         }
         return sum;
+    }
+
+    private class DijkstraInfo implements Comparable<DijkstraInfo> {
+        private final Vertex vertex;
+        private final int minDistance;
+
+        DijkstraInfo(Vertex vertex, int minDistance) {
+            this.vertex = vertex;
+            this.minDistance = minDistance;
+        }
+
+        @Override
+        public int compareTo(DijkstraInfo other) {
+            return Integer.compare(this.minDistance, other.minDistance);
+        }
+    }
+
+    public Map<Integer, Integer> dijkstra(int source) {
+        Map<Integer, Integer> distances = new HashMap<>();
+        distances.put(source, 0);
+        Queue<DijkstraInfo> queue = new PriorityQueue<>(DijkstraInfo::compareTo);
+        queue.add(new DijkstraInfo(vertices.get(0), 0));
+        Set<Vertex> computed = new HashSet<>();
+
+        while (!queue.isEmpty()) {
+            DijkstraInfo info = queue.poll();
+            if (computed.contains(info.vertex)) {
+                continue;
+            }
+            computed.add(info.vertex);
+            for (Edge edge : info.vertex) {
+                Vertex to = info.vertex.other(edge);
+                int shortestDistance = Math.min(distances.getOrDefault(to.data, Integer.MAX_VALUE),
+                        distances.getOrDefault(info.vertex.data, Integer.MAX_VALUE) + edge.weight);
+                distances.put(to.data, shortestDistance);
+                queue.add(new DijkstraInfo(to, shortestDistance));
+            }
+        }
+
+        return distances;
+    }
+
+    private void computeMinDistances(Vertex vertex, Map<Integer, Integer> distances, Set<Vertex> computed) {
+        if (computed.contains(vertex)) {
+            return;
+        }
+        computed.add(vertex);
+
+        for (Edge edge : vertex) {
+            Vertex to = vertex.other(edge);
+            int shortestDistance = Math.min(distances.getOrDefault(to.data, Integer.MAX_VALUE),
+                    distances.getOrDefault(vertex.data, Integer.MAX_VALUE) + edge.weight);
+            distances.put(to.data, shortestDistance);
+            computeMinDistances(to, distances, computed);
+        }
     }
 }
