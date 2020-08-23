@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DirectedGraph implements Iterable<DirectedGraph.Vertex>  {
     private final Map<Integer, Vertex> vertices = new HashMap<>();
@@ -20,6 +22,22 @@ public class DirectedGraph implements Iterable<DirectedGraph.Vertex>  {
         graph.addEdge(2, 0, 5);
         graph.addEdge(2, 3, 1);
         graph.addEdge(3, 0, 2);
+        return graph;
+    }
+
+    public static DirectedGraph example2() {
+        DirectedGraph graph = new DirectedGraph();
+        graph.addVertices(7);
+        graph.addEdge(0, 1, 6);
+        graph.addEdge(0, 2, 5);
+        graph.addEdge(0, 3, 5);
+        graph.addEdge(1, 4, -1);
+        graph.addEdge(2, 1, -2);
+        graph.addEdge(2, 4, 1);
+        graph.addEdge(3, 2, -2);
+        graph.addEdge(3, 5, -1);
+        graph.addEdge(4, 6, 3);
+        graph.addEdge(5,6, 3);
         return graph;
     }
 
@@ -142,5 +160,30 @@ public class DirectedGraph implements Iterable<DirectedGraph.Vertex>  {
                 matrix[i][j] = Integer.MAX_VALUE;
             }
         }
+    }
+
+    public Map<Integer, Long> bellmanFord(int source) {
+        Map<Integer, Long> distances = new HashMap<>();
+        distances.put(source, 0L);
+        Set<Edge> edges = edgeSet();
+        for (int i = 0 ; i < numberOfVertices - 1 ; i++) {
+            for (Edge edge : edges) {
+                distances.put(edge.to.data, Math.min(
+                        distances.getOrDefault(edge.to.data, (long) Integer.MAX_VALUE),
+                        distances.getOrDefault(edge.from.data, (long) Integer.MAX_VALUE) + edge.weight
+                ));
+            }
+        }
+        return distances;
+    }
+
+    private Set<Edge> edgeSet() {
+        Set<Edge> edges = new HashSet<>();
+        for (Vertex vertex : this) {
+            for (Edge edge : vertex) {
+                edges.add(edge);
+            }
+        }
+        return edges;
     }
 }
