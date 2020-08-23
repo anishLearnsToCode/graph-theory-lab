@@ -9,7 +9,7 @@ __Anish Sachdeva (DTU/2K16/MC/013)__
 | 3 | Program to Find Minimum Spanning tree Using Prim's Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab3.java) |
 | 4 | Program to Find Minimum Spanning tree Using Kruskal's Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab4.java) |
 | 5 | Program to find Shortest Path between 2 Vertices using Dijkstra Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab5.java) |
-| 6 | Program to find Shortest Path between every pair of vertices in a graph using Floyd-Warshall's Algorithm | | |
+| 6 | Program to find Shortest Path between every pair of vertices in a graph using Floyd-Warshall's Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab6.java) |
 | 7 | Program to find Shortest Path between 2 Vertices using Bellman Ford's Algorithm | | |
 | 8 | Program For finding maximum Matching for bipartite graph | | |
 | 9 | Program For finding maximum Matching for General Path | | |
@@ -22,3 +22,4 @@ Graph Classes, namely:
 |-------------|------|
 | Un-directed Unweighted Graph | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/UnDirectedGraph.java) |
 | Un-Directed Weighted Graph | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/UnDirectedWeightedGraph.java) | 
+| Directed Graph | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/DirectedGraph.java) |
