@@ -104,14 +104,14 @@ public class DirectedGraph implements Iterable<DirectedGraph.Vertex>  {
 
     public void addVertex(int data) {
         if (!vertices.containsKey(data)) {
-            vertices.put(data, new Vertex(data));
+            vertices.put(batchIndex++, new Vertex(data));
             numberOfVertices++;
         }
     }
 
     public void addVertices(int batch) {
         while (batch-- > 0) {
-            addVertex(batchIndex++);
+            addVertex(batchIndex);
         }
     }
 
