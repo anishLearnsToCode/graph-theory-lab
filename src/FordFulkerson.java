@@ -1,142 +1,298 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-/**
- * Ford fulkerson method Edmonds Karp algorithm for finding max flow
- *
- * Capacity - Capacity of an edge to carry units from source to destination vertex
- * Flow - Actual flow of units from source to destination vertex of an edge
- * Residual capacity - Remaining capacity on this edge i.e capacity - flow
- * AugmentedPath - Path from source to sink which has residual capacity greater than 0
- *
- * Time complexity is O(VE^2)
- *
- * References:
- * https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm
- */
-public class FordFulkerson {
+class FordFulkerson implements Iterable<FordFulkerson.Vertex> {
+    private final Map<Integer, Vertex> vertices = new HashMap<>();
+    private final int[][] adjacencyMatrix;
 
-    public int maxFlow(int[][] capacity, int source, int sink) {
-
-        //declare and initialize residual capacity as total available capacity initially.
-        int[][] residualCapacity = new int[capacity.length][capacity[0].length];
-        for (int i = 0; i < capacity.length; i++) {
-            for (int j = 0; j < capacity[0].length; j++) {
-                residualCapacity[i][j] = capacity[i][j];
-            }
-        }
-
-        //this is parent map for storing BFS parent
-        Map<Integer, Integer> parent = new HashMap<>();
-
-        //stores all the augmented paths
-        List<List<Integer>> augmentedPaths = new ArrayList<>();
-
-        //max flow we can get in this network
-        int maxFlow = 0;
-
-        //see if augmented path can be found from source to sink.
-        while(BFS(residualCapacity, parent, source, sink)) {
-            List<Integer> augmentedPath = new ArrayList<>();
-            int flow = Integer.MAX_VALUE;
-            //find minimum residual capacity in augmented path
-            //also add vertices to augmented path list
-            int v = sink;
-            while(v != source){
-                augmentedPath.add(v);
-                int u = parent.get(v);
-                if (flow > residualCapacity[u][v]) {
-                    flow = residualCapacity[u][v];
-                }
-                v = u;
-            }
-            augmentedPath.add(source);
-            Collections.reverse(augmentedPath);
-            augmentedPaths.add(augmentedPath);
-
-            //add min capacity to max flow
-            maxFlow += flow;
-
-            //decrease residual capacity by min capacity from u to v in augmented path
-            // and increase residual capacity by min capacity from v to u
-            v = sink;
-            while(v != source){
-                int u = parent.get(v);
-                residualCapacity[u][v] -= flow;
-                residualCapacity[v][u] += flow;
-                v = u;
-            }
-        }
-
-        printAugmentedPaths(augmentedPaths);
-        return maxFlow;
-    }
-
-    /**
-     * Prints all the augmented path which contribute to max flow
-     */
-    private void printAugmentedPaths(List<List<Integer>> augmentedPaths) {
-        System.out.println("Augmented paths");
-        augmentedPaths.forEach(path -> {
-            path.forEach(i -> System.out.print(i + " "));
-            System.out.println();
-        });
-    }
-
-    /**
-     * Breadth first search to find augmented path
-     */
-    private boolean BFS(int[][] residualCapacity, Map<Integer,Integer> parent,
-                        int source, int sink){
-        Set<Integer> visited = new HashSet<>();
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(source);
-        visited.add(source);
-        boolean foundAugmentedPath = false;
-        //see if we can find augmented path from source to sink
-        while(!queue.isEmpty()){
-            int u = queue.poll();
-            for(int v = 0; v < residualCapacity.length; v++){
-                //explore the vertex only if it is not visited and its residual capacity is
-                //greater than 0
-                if(!visited.contains(v) &&  residualCapacity[u][v] > 0){
-                    //add in parent map saying v got explored by u
-                    parent.put(v, u);
-                    //add v to visited
-                    visited.add(v);
-                    //add v to queue for BFS
-                    queue.add(v);
-                    //if sink is found then augmented path is found
-                    if ( v == sink) {
-                        foundAugmentedPath = true;
-                        break;
-                    }
+    private FordFulkerson(int[][] adjacencyMatrix) {
+        this.adjacencyMatrix = adjacencyMatrix;
+        addVertices(adjacencyMatrix.length);
+        for (int row = 0 ; row < adjacencyMatrix.length ; row++) {
+            for (int column = 0 ; column < adjacencyMatrix.length ; column++) {
+                if (adjacencyMatrix[row][column] > 0) {
+                    this.addEdge(row, column, adjacencyMatrix[row][column]);
                 }
             }
         }
-        //returns if augmented path is found from source to sink or not
-        return foundAugmentedPath;
     }
 
-    public static void main(String[] args){
-        FordFulkerson ff = new FordFulkerson();
-        int[][] capacity = {
+    @Override
+    public Iterator<Vertex> iterator() {
+        return vertices.values().iterator();
+    }
+
+    @Override
+    public String toString() {
+        return "DirectedGraph{" +
+                "vertices=" + vertices.values() +
+                ", adjacencyMatrix=" + toString(adjacencyMatrix) +
+                '}';
+    }
+
+    public static FordFulkerson example3() {
+        // max flow: 4
+        int[][] adjacencyMatrix = {
+                {0, 4},
+                {0, 0}
+        };
+        return FordFulkerson.from(adjacencyMatrix);
+    }
+
+    public static FordFulkerson example4() {
+        // max flow: 6
+        int[][] matrix = {
+                {0, 5, 3, 0},
+                {0, 0, 0, 3},
+                {0, 1, 2, 10},
+                {0, 0, 0, 0}
+        };
+        return FordFulkerson.from(matrix);
+    }
+
+    public static FordFulkerson example5() {
+        // max flow: 5
+        int[][] matrix = {
+                {5, 10, 0},
+                {0, 20, 5},
+                {0, 0, 1}
+        };
+        return FordFulkerson.from(matrix);
+    }
+
+    public static FordFulkerson example6() {
+        // max flow: 4
+        int[][] matrix = {
+                {0, 2, 3, 0, 0},
+                {0, 0, 0, 3, 0},
+                {0, 1, 0, 0, 1},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 3, 0}
+        };
+        return FordFulkerson.from(matrix);
+    }
+
+    public static FordFulkerson example7() {
+        // max flow: 5
+        int[][] matrix = {
                 {0, 3, 0, 3, 0, 0, 0},
                 {0, 0, 4, 0, 0, 0, 0},
-                {3, 0, 0, 1, 2, 0, 0},
+                {0, 0, 0, 1, 2, 0, 0},
                 {0, 0, 0, 0, 2, 6, 0},
                 {0, 1, 0, 0, 0, 0, 1},
                 {0, 0, 0, 0, 0, 0, 9},
                 {0, 0, 0, 0, 0, 0, 0}
         };
+        return FordFulkerson.from(matrix);
+    }
 
-        System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
+    private String toString(int[][] matrix) {
+        StringBuilder result = new StringBuilder().append('[');
+        for (int[] row : matrix) {
+            result.append(Arrays.toString(row)).append(' ');
+        }
+        return result.append(']').toString();
+    }
+
+    static class Vertex implements Iterable<Edge> {
+        private final int data;
+        private final Map<Vertex, Edge> edges = new HashMap<>();
+
+        Vertex(int data) {
+            this.data = data;
+        }
+
+        public void addEdgeTo(Vertex to, Edge edge) {
+            this.edges.put(to, edge);
+        }
+
+        @Override
+        public Iterator<Edge> iterator() {
+            return edges.values().iterator();
+        }
+
+        @Override
+        public String toString() {
+            return "Vertex{" +
+                    "val=" + data +
+                    ", out degree=" + edges.size() +
+                    '}';
+        }
+    }
+
+    static class Edge {
+        private final Vertex from;
+        private final Vertex to;
+        private int residualCapacity;
+
+        private Edge(Vertex from, Vertex to, int capacity) {
+            this.from = from;
+            this.to = to;
+            this.residualCapacity = capacity;
+        }
+
+        @Override
+        public String toString() {
+            return "Edge{" +
+                    "from=" + from.data +
+                    ", to=" + to.data +
+                    ", residualCapacity=" + residualCapacity +
+                    '}';
+        }
+    }
+
+    public static FordFulkerson from(int[][] adjacencyMatrix) {
+        assertIsSquareMatrix(adjacencyMatrix);
+        assertEdgesArePositive(adjacencyMatrix);
+        return new FordFulkerson(adjacencyMatrix);
+    }
+
+    private static void assertIsSquareMatrix(int[][] matrix) {
+        int degree  = matrix.length;
+        for (int[] row : matrix) {
+            if (row.length != degree) {
+                throw new RuntimeException("Matrix isn't a square Matrix");
+            }
+        }
+    }
+
+    private static void assertEdgesArePositive(int[][] matrix) {
+        for (int[] row : matrix) {
+            for(int element : row) {
+                if (element < 0) {
+                    throw new RuntimeException("Edges should have positive weights");
+                }
+            }
+        }
+    }
+
+    private void addVertices(int numberOfVertices) {
+        for (int i = 0 ; i < numberOfVertices ; i++) {
+            this.vertices.put(i, new Vertex(i));
+        }
+    }
+
+    private void addEdge(int from, int to, int weight) {
+        Vertex fromVertex = vertices.get(from);
+        Vertex toVertex = vertices.get(to);
+        Edge edge = new Edge(fromVertex, toVertex, weight);
+        fromVertex.addEdgeTo(toVertex, edge);
+    }
+
+    public int maxFlow(int source, int sink) {
+        assertSourceAndSinkNotTheSame(source, sink);
+        assertNoParallelEdges();
+
+        FordFulkerson graph = this.withParallelFlowEdges();
+        Vertex sourceVertex = graph.vertices.get(source);
+        Vertex sinkVertex = graph.vertices.get(sink);
+        return graph.maxFlow(sourceVertex, sinkVertex);
+    }
+
+    private int maxFlow(Vertex source, Vertex sink) {
+        int maxFlow = 0;
+        Queue<Vertex> queue = new LinkedList<>();
+        Map<Vertex, Vertex> parentMap = new HashMap<>();
+        Set<Vertex> visited = new HashSet<>();
+        addSourceAsStartVertex(source, queue, visited);
+
+        while (!queue.isEmpty()) {
+            Vertex current = queue.poll();
+            if (current == sink) {
+                List<Edge> augmentingPath = getAugmentingPath(current, parentMap);
+                int bottleneck = getBottleneck(augmentingPath);
+                updateResidualCapacity(augmentingPath, bottleneck);
+                maxFlow += bottleneck;
+                clearMaxFlowCache(visited, parentMap, queue);
+                addSourceAsStartVertex(source, queue, visited);
+                continue;
+            }
+
+            for (Edge edge : current) {
+                if (edge.residualCapacity > 0 && !visited.contains(edge.to)) {
+                    queue.add(edge.to);
+                    visited.add(edge.to);
+                    parentMap.put(edge.to, edge.from);
+                }
+            }
+        }
+
+        return maxFlow;
+    }
+
+    private void clearMaxFlowCache(Set<Vertex> visited, Map<Vertex, Vertex> parentMap, Queue<Vertex> queue) {
+        visited.clear();
+        parentMap.clear();
+        queue.clear();
+    }
+
+    private void addSourceAsStartVertex(Vertex source, Queue<Vertex> queue, Set<Vertex> visited) {
+        queue.add(source);
+        visited.add(source);
+    }
+
+    private void assertSourceAndSinkNotTheSame(int source, int sink) {
+        if (source == sink) {
+            throw new RuntimeException("Invalid Args: source and sink can't be the same");
+        }
+    }
+
+    private FordFulkerson withParallelFlowEdges() {
+        FordFulkerson graph = new FordFulkerson(this.adjacencyMatrix);
+        for (Vertex vertex : graph) {
+            for (Edge edge : vertex) {
+                if (edge.residualCapacity > 0) {
+                    edge.to.addEdgeTo(edge.from, new Edge(edge.to, edge.from, 0));
+                }
+            }
+        }
+        return graph;
+    }
+
+    private void assertNoParallelEdges() {
+        for (int row = 0 ; row < adjacencyMatrix.length ; row++) {
+            for (int column = row + 1 ; column < adjacencyMatrix.length ; column++) {
+                if (adjacencyMatrix[row][column] > 0 && adjacencyMatrix[column][row] > 0) {
+                    throw new RuntimeException("Parallel Edges in the Graph. There shouldn't be any parallel edges " +
+                            "to find the Max Flow");
+                }
+            }
+        }
+    }
+
+    private List<Edge> getAugmentingPath(Vertex sink, Map<Vertex, Vertex> parentMap) {
+        List<Edge> edges = new ArrayList<>();
+        while (parentMap.containsKey(sink)) {
+            Vertex parent = parentMap.get(sink);
+            edges.add(parent.edges.get(sink));
+            sink = parent;
+        }
+
+        Collections.reverse(edges);
+        return edges;
+    }
+
+    private int getBottleneck(List<Edge> edges) {
+        int bottleneck = Integer.MAX_VALUE;
+        for (Edge edge : edges) {
+            bottleneck = Math.min(bottleneck, edge.residualCapacity);
+        }
+        return bottleneck;
+    }
+
+    private void updateResidualCapacity(List<Edge> augmentingPath, int bottleneck) {
+        for (Edge edge : augmentingPath) {
+            edge.residualCapacity -= bottleneck;
+            edge.to.edges.get(edge.from).residualCapacity += bottleneck;
+        }
     }
 }
