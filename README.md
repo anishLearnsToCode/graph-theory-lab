@@ -13,7 +13,7 @@ __Anish Sachdeva (DTU/2K16/MC/013)__
 | 7 | Program to find Shortest Path between 2 Vertices using Bellman Ford's Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab7.java) |
 | 8 | Program For finding maximum Matching for bipartite graph | | |
 | 9 | Program For finding maximum Matching for General Path | | |
-| 10 | Program to find maximum flow from source node to sink node using Ford-Fulkerson Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/FordFulkerson.java) | 
+| 10 | Program to find maximum flow from source node to sink node using Ford-Fulkerson Algorithm | | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab10.java) | 
 
 The above programs only contain driver code and main logic has been encapsulated inside the
 Graph Classes, namely:

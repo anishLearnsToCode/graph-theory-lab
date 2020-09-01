@@ -23,9 +23,9 @@ import java.util.Set;
  */
 public class FordFulkerson {
 
-    public int maxFlow(int[][] capacity, int source, int sink){
+    public int maxFlow(int[][] capacity, int source, int sink) {
 
-        //declare and initialize residual capacity as total avaiable capacity initially.
+        //declare and initialize residual capacity as total available capacity initially.
         int[][] residualCapacity = new int[capacity.length][capacity[0].length];
         for (int i = 0; i < capacity.length; i++) {
             for (int j = 0; j < capacity[0].length; j++) {
@@ -43,7 +43,7 @@ public class FordFulkerson {
         int maxFlow = 0;
 
         //see if augmented path can be found from source to sink.
-        while(BFS(residualCapacity, parent, source, sink)){
+        while(BFS(residualCapacity, parent, source, sink)) {
             List<Integer> augmentedPath = new ArrayList<>();
             int flow = Integer.MAX_VALUE;
             //find minimum residual capacity in augmented path
@@ -74,6 +74,7 @@ public class FordFulkerson {
                 v = u;
             }
         }
+
         printAugmentedPaths(augmentedPaths);
         return maxFlow;
     }
@@ -126,13 +127,15 @@ public class FordFulkerson {
 
     public static void main(String[] args){
         FordFulkerson ff = new FordFulkerson();
-        int[][] capacity = {{0, 3, 0, 3, 0, 0, 0},
+        int[][] capacity = {
+                {0, 3, 0, 3, 0, 0, 0},
                 {0, 0, 4, 0, 0, 0, 0},
                 {3, 0, 0, 1, 2, 0, 0},
                 {0, 0, 0, 0, 2, 6, 0},
                 {0, 1, 0, 0, 0, 0, 1},
                 {0, 0, 0, 0, 0, 0, 9},
-                {0, 0, 0, 0, 0, 0, 0}};
+                {0, 0, 0, 0, 0, 0, 0}
+        };
 
         System.out.println("\nMaximum capacity " + ff.maxFlow(capacity, 0, 6));
     }

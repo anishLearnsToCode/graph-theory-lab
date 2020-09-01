@@ -166,4 +166,18 @@ public class UnDirectedGraph {
     public int oddVertices() {
         return numberOfVertices - evenVertices();
     }
+
+    public UnDirectedGraph complement() {
+        return complement(this.adjacencyMatrix);
+    }
+
+    public UnDirectedGraph complement(int[][] adjacencyMatrix) {
+        int[][] result = new int[adjacencyMatrix.length][adjacencyMatrix.length];
+        for (int row = 0 ; row < result.length ; row++) {
+            for (int column = 0 ; column < adjacencyMatrix.length ; column++) {
+                result[row][column] = adjacencyMatrix[row][column] == 1 ? 0 : 1;
+            }
+        }
+        return UnDirectedGraph.fromMatrix(result);
+    }
 }

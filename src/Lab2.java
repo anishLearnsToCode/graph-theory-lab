@@ -25,5 +25,9 @@ public class Lab2 {
         // testing ring sum
         UnDirectedGraph ringSum = UnDirectedGraph.fromMatrix(matrix1).ringSum(matrix2);
         System.out.println(ringSum);
+
+        // testing complement of graph
+        UnDirectedGraph complement = UnDirectedGraph.fromMatrix(matrix1).complement();
+        System.out.println(complement);
     }
 }
