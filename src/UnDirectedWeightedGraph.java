@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.Set;
 
 public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph.Vertex> {
-    private final Map<Integer, Vertex> vertices = new HashMap<>();
+    public final Map<Integer, Vertex> vertices = new HashMap<>();
     private int numberOfVertices = 0;
     private int degree = 0;
     private int batchSize = 0;
@@ -97,7 +97,16 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
             return "Vertex{" +
                     "data=" + data +
                     ", degree=" + degree +
+                    ", edges= [" + edgesFrom() + "]" +
                     '}';
+        }
+
+        private String edgesFrom() {
+            StringBuilder result = new StringBuilder();
+            for (Edge edge : edges) {
+                result.append(other(edge).data).append(" ");
+            }
+            return result.toString();
         }
     }
 
@@ -194,6 +203,12 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
         }
 
         return graph;
+    }
+
+    public void print() {
+        for (Vertex vertex : this) {
+            System.out.println(vertex);
+        }
     }
 
     public boolean pathBetween(int from, int to) {
