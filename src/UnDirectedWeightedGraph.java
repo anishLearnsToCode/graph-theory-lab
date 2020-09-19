@@ -12,7 +12,7 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
     private int degree = 0;
     private int batchSize = 0;
 
-    public static UnDirectedWeightedGraph example1() {
+    public static UnDirectedWeightedGraph example9() {
         UnDirectedWeightedGraph graph = new UnDirectedWeightedGraph();
         graph.addVertices(6);
         graph.addEdge(0, 1, 7);
@@ -32,8 +32,8 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
     @Override
     public String toString() {
         return "Graph{" +
-                "numberOfVertices=" + numberOfVertices +
-                ", degree=" + degree +
+                "order=" + numberOfVertices +
+                ", size=" + degree / 2 +
                 '}';
     }
 
