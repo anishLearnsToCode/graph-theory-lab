@@ -261,22 +261,22 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
 
     private class DijkstraInfo implements Comparable<DijkstraInfo> {
         private final Vertex vertex;
-        private final int minDistance;
+        private final long minDistance;
 
-        DijkstraInfo(Vertex vertex, int minDistance) {
+        DijkstraInfo(Vertex vertex, long minDistance) {
             this.vertex = vertex;
             this.minDistance = minDistance;
         }
 
         @Override
         public int compareTo(DijkstraInfo other) {
-            return Integer.compare(this.minDistance, other.minDistance);
+            return Long.compare(this.minDistance, other.minDistance);
         }
     }
 
-    public Map<Integer, Integer> dijkstra(int source) {
-        Map<Integer, Integer> distances = new HashMap<>();
-        distances.put(source, 0);
+    public Map<Integer, Long> dijkstra(int source) {
+        Map<Integer, Long> distances = new HashMap<>();
+        distances.put(source, 0L);
         Queue<DijkstraInfo> queue = new PriorityQueue<>(DijkstraInfo::compareTo);
         queue.add(new DijkstraInfo(vertices.get(0), 0));
         Set<Vertex> computed = new HashSet<>();
@@ -289,8 +289,8 @@ public class UnDirectedWeightedGraph implements Iterable<UnDirectedWeightedGraph
             computed.add(info.vertex);
             for (Edge edge : info.vertex) {
                 Vertex to = info.vertex.other(edge);
-                int shortestDistance = Math.min(distances.getOrDefault(to.data, Integer.MAX_VALUE),
-                        distances.getOrDefault(info.vertex.data, Integer.MAX_VALUE) + edge.weight);
+                long shortestDistance = Math.min(distances.getOrDefault(to.data, (long) Integer.MAX_VALUE),
+                        distances.getOrDefault(info.vertex.data, (long) Integer.MAX_VALUE) + edge.weight);
                 distances.put(to.data, shortestDistance);
                 queue.add(new DijkstraInfo(to, shortestDistance));
             }
