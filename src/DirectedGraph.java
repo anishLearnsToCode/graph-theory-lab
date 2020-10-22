@@ -127,6 +127,11 @@ public class DirectedGraph implements Iterable<DirectedGraph.Vertex>  {
         degree++;
     }
 
+    /**
+     * Time Complexity: O(V^3)
+     * Space Complexity: O(V^2)
+     * @return the minimum distance matrix between all vertices of the graph
+     */
     public long[][] floydWarshallMinDistances() {
         long[][] adjacencyMatrix = getAdjacencyMatrix();
         for (int k = 0 ; k < adjacencyMatrix.length ; k++) {
@@ -162,6 +167,12 @@ public class DirectedGraph implements Iterable<DirectedGraph.Vertex>  {
         }
     }
 
+    /**
+     * Time Complexity: O(V * E)
+     * Space Complexity: O(V)
+     * @param source the source
+     * @return the distance from the source vertex to all other vertices
+     */
     public Map<Integer, Long> bellmanFord(int source) {
         Map<Integer, Long> distances = new HashMap<>();
         distances.put(source, 0L);
