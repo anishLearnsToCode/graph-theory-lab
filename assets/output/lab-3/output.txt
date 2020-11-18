@@ -1,0 +1,21 @@
+The Original Graph
+Graph{order=6, size=11}
+Edge Sum: 49
+Vertex{data=0, degree=2, edges= [1 2 ]}
+Vertex{data=1, degree=4, edges= [2 0 3 3 ]}
+Vertex{data=2, degree=4, edges= [4 3 1 0 ]}
+Vertex{data=3, degree=5, edges= [2 4 1 5 1 ]}
+Vertex{data=4, degree=3, edges= [2 3 5 ]}
+Vertex{data=5, degree=4, edges= [4 3 5 ]}
+
+The new Graph After Applying Prim's Algorithm
+Graph{order=6, size=5}
+Edge Sum: 17
+Vertex{data=0, degree=1, edges= [1 ]}
+Vertex{data=1, degree=2, edges= [0 2 ]}
+Vertex{data=2, degree=2, edges= [4 1 ]}
+Vertex{data=3, degree=1, edges= [4 ]}
+Vertex{data=4, degree=3, edges= [5 2 3 ]}
+Vertex{data=5, degree=1, edges= [4 ]}
+
+Process finished with exit code 0

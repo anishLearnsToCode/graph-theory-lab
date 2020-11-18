@@ -1,0 +1,5 @@
+Following are the edges in the constructed MST
+0 -- 2 == 6
+0 -- 1 == 10
+0 -- 3 == 5
+Minimum Cost Spanning Tree: 21
