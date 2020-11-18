@@ -4,7 +4,7 @@ __Anish Sachdeva (DTU/2K16/MC/013)__
 ⭐ [Project Report](assets/graph-theory-lab-file.pdf)
 
 
-| No. | Experiment Name | Date | Code |
+| No. | Experiment Name | Date | Solution |
 |-----|-----------------|------|:----:|
 | 1 | Program to find the number of vertices, even vertices, odd vertices and number of edges in a Graph. | 20th August 2020 | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab1.java) [![cpp](https://img.icons8.com/color/35/000000/c-plus-plus-logo.png)](cpp/lab1.cpp) |  
 | 2 | Program to Find Union, Intersection and ring-sum of 2 graphs. | 27th September 2020 | [![Java](https://img.icons8.com/color/40/000000/java-coffee-cup-logo.png)](src/Lab2.java) [![cpp](https://img.icons8.com/color/35/000000/c-plus-plus-logo.png)](cpp/lab2.cpp)|
